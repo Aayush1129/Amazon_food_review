@@ -54,9 +54,9 @@ class Instructor:
 
         
         ## using our own dataset
-        data = pd.read_csv('../train_F3WbcTw.csv')
+        data = pd.read_csv('train_data.csv')
         # test_data = pd.read_csv('../test_tOlRoBf.csv')
-        train_data, test_data = train_test_split(data, test_size=0.1, random_state=42)
+        train_data, test_data = train_test_split(data, test_size=0.15, random_state=42)
         self.trainset = ABSADataset(train_data, tokenizer)
         self.testset = ABSADataset(test_data, tokenizer)
         
@@ -130,7 +130,7 @@ class Instructor:
             val_acc, val_f1 = self._evaluate_acc_f1(val_data_loader)
             logger.info('> val_acc: {:.4f}, val_f1: {:.4f}'.format(val_acc, val_f1))
             if val_acc > max_val_acc:
-                max_val_acc = val_acc
+                # max_val_acc = val_acc
                 if not os.path.exists('state_dict'):
                     os.mkdir('state_dict')
                 path = 'state_dict/{0}_{1}_val_acc{2}'.format(self.opt.model_name, self.opt.dataset, round(val_acc, 4))
@@ -192,16 +192,16 @@ def main():
     parser.add_argument('--optimizer', default='adam', type=str)
     parser.add_argument('--initializer', default='xavier_uniform_', type=str)
     parser.add_argument('--learning_rate', default=3e-5, type=float, help='try 5e-5, 2e-5 for BERT, 1e-3 for others')
-    parser.add_argument('--dropout', default=0.1, type=float)
+    parser.add_argument('--dropout', default=0.2, type=float)
     parser.add_argument('--l2reg', default=0.01, type=float)
     parser.add_argument('--num_epoch', default=10, type=int, help='try larger number for non-BERT models')
-    parser.add_argument('--batch_size', default=32, type=int, help='try 16, 32, 64 for BERT models')
+    parser.add_argument('--batch_size', default=64, type=int, help='try 16, 32, 64 for BERT models')
     parser.add_argument('--log_step', default=5, type=int)
     parser.add_argument('--embed_dim', default=300, type=int)
     parser.add_argument('--hidden_dim', default=300, type=int)
     parser.add_argument('--bert_dim', default=768, type=int)
     parser.add_argument('--pretrained_bert_name', default='bert-base-uncased', type=str)
-    parser.add_argument('--max_seq_len', default=256, type=int)
+    parser.add_argument('--max_seq_len', default=128, type=int)
     parser.add_argument('--polarities_dim', default=3, type=int)
     parser.add_argument('--hops', default=3, type=int)
     parser.add_argument('--device', default=None, type=str, help='e.g. cuda:0')
