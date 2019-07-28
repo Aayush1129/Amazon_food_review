@@ -137,20 +137,20 @@ if __name__ == '__main__':
     opt.state_dict_path = model_state_dict_paths[opt.model_name]
     opt.embed_dim = 300
     opt.hidden_dim = 300
-    opt.max_seq_len = 256
+    opt.max_seq_len = 128
     opt.polarities_dim = 3
     opt.hops = 3
     opt.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     opt.pretrained_bert_name = 'bert-base-uncased'
-    opt.dropout = 0.1
+    opt.dropout = 0.15
     opt.bert_dim = 768
     opt.inputs_cols = input_colses[opt.model_name]
-    opt.batch_size = 32
+    opt.batch_size = 64
 
 
     inf = Inferer(opt)
     # t_probs = inf.evaluate(['happy memory', 'the service is terrible', 'just normal food'])
-    test_data = pd.read_csv('../test_tOlRoBf.csv')
+    test_data = pd.read_csv('test_tOlRoBf.csv')
     testset = ABSAInfer(test_data, inf.tokenizer)
     test_data_loader = DataLoader(dataset=testset, batch_size=opt.batch_size, shuffle=False)
     outputs = inf._evaluate_acc_f1(test_data_loader)
